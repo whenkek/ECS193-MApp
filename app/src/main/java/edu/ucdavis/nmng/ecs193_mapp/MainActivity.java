@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity
 
         String jsonStr = patient.toString();
 
-        System.out.println(jsonStr);
+//        System.out.println(jsonStr);
 
         new InsertTest().execute(jsonStr);
     }
