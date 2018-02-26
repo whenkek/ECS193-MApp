@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -19,9 +18,12 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONObject;
+
 public class LogInActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
+    private static final int RC_GET_TOKEN = 9002;
 
     private GoogleSignInClient mGoogleSignInClient;
     private TextView mStatusTextView;
@@ -43,6 +45,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
                 .build();
 
@@ -83,7 +86,9 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+//        startActivityForResult(signInIntent, RC_SIGN_IN);
+        startActivityForResult(signInIntent, RC_GET_TOKEN);
+
     }
 
     // [START signOut]
@@ -118,7 +123,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_GET_TOKEN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -130,8 +135,12 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
+            String idToken = account.getIdToken();
+
             // Signed in successfully, show authenticated UI.
 //            updateUI(account);
+
+            validateIdToken(idToken);
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -140,6 +149,8 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
             updateUI(null);
+        } catch (Exception e) {
+            ;
         }
     }
 
@@ -155,6 +166,17 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
+    }
+
+    private void validateIdToken(String idToken) throws Exception {
+        JSONObject token = new JSONObject();
+        token.put("idToken", idToken);
+
+        String jsonStr = token.toString();
+
+        System.out.println(jsonStr);
+
+//        new InsertTest().execute(getString(R.string.check_token_url), jsonStr);
     }
 
 }

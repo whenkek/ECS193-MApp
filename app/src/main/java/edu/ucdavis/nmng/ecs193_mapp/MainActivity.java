@@ -47,6 +47,6 @@ public class MainActivity extends AppCompatActivity
 
 //        System.out.println(jsonStr);
 
-        new InsertTest().execute(jsonStr);
+        new InsertTest().execute(getString(R.string.insert_reading_url), jsonStr);
     }
 }
