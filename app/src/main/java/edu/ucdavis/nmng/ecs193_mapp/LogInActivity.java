@@ -1,68 +1,6 @@
-//package edu.ucdavis.nmng.ecs193_mapp;
-//
-//import android.support.v7.app.AppCompatActivity;
-//import android.os.Bundle;
-//import android.view.View;
-//import android.widget.EditText;
-//
-//import org.json.JSONObject;
-//
-//import java.io.BufferedOutputStream;
-//import java.io.IOException;
-//import java.io.OutputStream;
-//import java.io.OutputStreamWriter;
-//import java.net.HttpURLConnection;
-//import java.net.MalformedURLException;
-//import java.net.SocketTimeoutException;
-//import java.net.URL;
-//
-//public class MainActivity extends AppCompatActivity
-//{
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState)
-//    {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//    }
-//
-//    public void PostNumbers (View button) throws Exception
-//    {
-//        final EditText patientIDField = (EditText)findViewById(R.id.patient_id_field);
-//        String patientIDStr = patientIDField.getText().toString();
-//
-//        final EditText channel0Field = (EditText)findViewById(R.id.channel0_field);
-//        String channel0Str = channel0Field.getText().toString();
-//
-//        final EditText channel1Field = (EditText)findViewById(R.id.channel1_field);
-//        String channel1Str = channel1Field.getText().toString();
-//
-//        final EditText channel2Field = (EditText)findViewById(R.id.channel2_field);
-//        String channel2Str = channel2Field.getText().toString();
-//
-//        final EditText channel3Field = (EditText)findViewById(R.id.channel3_field);
-//        String channel3Str = channel3Field.getText().toString();
-//
-//        JSONObject patient = new JSONObject();
-//        JSONObject floats = new JSONObject();
-//
-//        floats.put("ch0", channel0Str);
-//        floats.put("ch1", channel1Str);
-//        floats.put("ch2", channel2Str);
-//        floats.put("ch3", channel3Str);
-//
-//        patient.put("patient_" + patientIDStr, floats);
-//
-//        String jsonStr = patient.toString();
-//
-////        System.out.println(jsonStr);
-//
-//        new InsertTest().execute(jsonStr);
-//    }
-//}
 package edu.ucdavis.nmng.ecs193_mapp;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -76,10 +14,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class LogInActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
 
@@ -89,16 +26,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // Views
-        mStatusTextView = findViewById(R.id.status);
+        setContentView(R.layout.activity_log_in);
 
         // Button listeners
         // Register button to sign in the user when clicked
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
-        findViewById(R.id.disconnect_button).setOnClickListener(this);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -132,12 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.sign_in_button:
                 signIn();
                 break;
-            case R.id.sign_out_button:
-                signOut();
-                break;
-            case R.id.disconnect_button:
-                revokeAccess();
-                break;
+            // ...
         }
     }
 
@@ -145,34 +72,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-
-    // [START signOut]
-    private void signOut() {
-        mGoogleSignInClient.signOut()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // [START_EXCLUDE]
-                        updateUI(null);
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
-    // [END signOut]
-
-    // [START revokeAccess]
-    private void revokeAccess() {
-        mGoogleSignInClient.revokeAccess()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // [START_EXCLUDE]
-                        updateUI(null);
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
-    // [END revokeAccess]
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
