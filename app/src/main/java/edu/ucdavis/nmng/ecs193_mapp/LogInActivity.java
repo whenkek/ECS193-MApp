@@ -20,7 +20,9 @@ import com.google.android.gms.tasks.Task;
 
 import org.json.JSONObject;
 
-public class LogInActivity extends AppCompatActivity implements View.OnClickListener {
+public class LogInActivity extends AppCompatActivity implements View.OnClickListener, TaskCompleted {
+    public static int patient_id = -1;
+
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
     private static final int RC_GET_TOKEN = 9002;
@@ -140,10 +142,14 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
             // Signed in successfully, show authenticated UI.
 //            updateUI(account);
 
-            validateIdToken(idToken);
+            patient_id = Integer.valueOf(validateIdToken(idToken));
+            if(patient_id > 0) {
 
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }
+            else
+                signOut();
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -168,7 +174,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void validateIdToken(String idToken) throws Exception {
+    private String validateIdToken(String idToken) throws Exception {
         JSONObject token = new JSONObject();
         token.put("idToken", idToken);
 
@@ -176,7 +182,14 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
         System.out.println(jsonStr);
 
-//        new InsertTest().execute(getString(R.string.check_token_url), jsonStr);
+        return new Poster(LogInActivity.this).execute(getString(R.string.check_token_url), jsonStr).get();
+//        return 0;
+    }
+
+    @Override
+    public void onTaskComplete(Integer result) {
+
+//        Toast.makeText(this,"The result is " + Integer.toString(result),Toast.LENGTH_LONG).show();
     }
 
 }

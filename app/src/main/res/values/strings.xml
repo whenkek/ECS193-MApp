@@ -11,10 +11,11 @@
     <string name="sign_out">Sign Out</string>
     <string name="disconnect">Disconnect</string>
 
+    <!--671445578517-ogrl80hb1pnq5ruirarvjsmvd8th2hjp.apps.googleusercontent.com-->
     <string name="server_client_id">671445578517-ogrl80hb1pnq5ruirarvjsmvd8th2hjp.apps.googleusercontent.com</string>
-    <!--<string name="insert_reading_url">http://localhost:8080/insert/reading</string>-->
-    <string name="insert_reading_url">https://majestic-legend-193620.appspot.com/insert/reading</string>
-    <!--<string name="check_token_url">http://localhost:8080/check/token</string>-->
-    <string name="check_token_url">https://majestic-legend-193620.appspot.com/check/token</string>
+    <string name="insert_reading_url">http://192.168.1.253:8080/insert/reading</string>
+    <!--<string name="insert_reading_url">https://majestic-legend-193620.appspot.com/insert/reading</string>-->
+    <string name="check_token_url">http://192.168.1.253:8080/check/token</string>
+    <!--<string name="check_token_url">https://majestic-legend-193620.appspot.com/check/token</string>-->
     <!--<string name="check_token_url">http://majestic-legend.requestcatcher.com/</string>-->
 </resources>
