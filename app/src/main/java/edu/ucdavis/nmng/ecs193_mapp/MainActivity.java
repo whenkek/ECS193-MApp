@@ -7,15 +7,6 @@ import android.widget.EditText;
 
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-
 public class MainActivity extends AppCompatActivity
 {
     @Override
@@ -27,8 +18,8 @@ public class MainActivity extends AppCompatActivity
 
     public void PostNumbers (View button) throws Exception
     {
-        final EditText patientIDField = (EditText)findViewById(R.id.patient_id_field);
-        String patientIDStr = patientIDField.getText().toString();
+//        final EditText patientIDField = (EditText)findViewById(R.id.patient_id_field);
+//        String patientIDStr = patientIDField.getText().toString();
 
         final EditText channel0Field = (EditText)findViewById(R.id.channel0_field);
         String channel0Str = channel0Field.getText().toString();
@@ -50,12 +41,12 @@ public class MainActivity extends AppCompatActivity
         floats.put("ch2", channel2Str);
         floats.put("ch3", channel3Str);
 
-        patient.put("patient_" + patientIDStr, floats);
+        patient.put("patient_" + Integer.toString(LogInActivity.patient_id), floats);
 
         String jsonStr = patient.toString();
 
-        System.out.println(jsonStr);
+//        System.out.println(jsonStr);
 
-        new InsertTest().execute(jsonStr);
+        new Poster(MainActivity.this, false).execute(getString(R.string.insert_reading_url), jsonStr);
     }
 }
