@@ -182,12 +182,12 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
         System.out.println(jsonStr);
 
-        return new Poster(LogInActivity.this).execute(getString(R.string.check_token_url), jsonStr).get();
+        return new Poster(LogInActivity.this, false).execute(getString(R.string.check_token_url), jsonStr).get();
 //        return 0;
     }
 
     @Override
-    public void onTaskComplete(Integer result) {
+    public void onTaskComplete(String result) {
 
 //        Toast.makeText(this,"The result is " + Integer.toString(result),Toast.LENGTH_LONG).show();
     }

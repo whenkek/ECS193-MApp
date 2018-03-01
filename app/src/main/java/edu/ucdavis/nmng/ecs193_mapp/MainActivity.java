@@ -47,6 +47,6 @@ public class MainActivity extends AppCompatActivity
 
 //        System.out.println(jsonStr);
 
-        new Poster(MainActivity.this).execute(getString(R.string.insert_reading_url), jsonStr);
+        new Poster(MainActivity.this, false).execute(getString(R.string.insert_reading_url), jsonStr);
     }
 }

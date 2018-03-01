@@ -3,15 +3,9 @@ package edu.ucdavis.nmng.ecs193_mapp;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -21,22 +15,25 @@ import javax.net.ssl.HttpsURLConnection;
 public class Poster extends AsyncTask<String, Void, String>
 {
     private TaskCompleted mCallback;
+    private boolean doesCallback;
 
-    public Poster(Context context){
-//        this.mCallback = (TaskCompleted) context;
+    public Poster(Context context, boolean doesCallback){
+        this.doesCallback = doesCallback;
+        if (doesCallback)
+            this.mCallback = (TaskCompleted) context;
     }
 
     @Override
     protected String doInBackground(String... params)
     {
 
-        HttpURLConnection conn = null;
+        HttpsURLConnection conn = null;
         String jsonStr = params[1];
 
         try
         {
             URL url = new URL(params[0]);
-            conn = (HttpURLConnection)url.openConnection();
+            conn = (HttpsURLConnection)url.openConnection();
 
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoInput(true);
@@ -82,9 +79,10 @@ public class Poster extends AsyncTask<String, Void, String>
         return "";
     }
 
-//    @Override
-//    protected void onPostExecute(String results) {
-        //This is where you return data back to caller
-//        mCallback.onTaskComplete(results);
-//    }
+    @Override
+    protected void onPostExecute(String results) {
+        //This is where you return data back to caller asynchronously
+        if (doesCallback)
+            mCallback.onTaskComplete(results);
+    }
 }
