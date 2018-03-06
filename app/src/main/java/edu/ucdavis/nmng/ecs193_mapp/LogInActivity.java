@@ -142,10 +142,15 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
             // Signed in successfully, show authenticated UI.
 //            updateUI(account);
 
-            patient_id = Integer.valueOf(validateIdToken(idToken));
+            JSONObject result = new JSONObject(validateIdToken(idToken));
+
+            patient_id = result.getInt("id");
+
+            System.out.println(patient_id);
             if(patient_id > 0) {
 
-                Intent intent = new Intent(this, MainActivity.class);
+//                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, DeviceScanActivity.class);
                 startActivity(intent);
             }
             else

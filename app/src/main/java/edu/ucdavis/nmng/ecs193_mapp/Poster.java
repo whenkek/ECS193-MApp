@@ -29,7 +29,7 @@ public class Poster extends AsyncTask<String, Void, String>
 
         HttpsURLConnection conn = null;
         String jsonStr = params[1];
-
+        System.out.println(jsonStr);
         try
         {
             URL url = new URL(params[0]);
@@ -49,7 +49,7 @@ public class Poster extends AsyncTask<String, Void, String>
             StringBuilder responseOutput = new StringBuilder();
 
             System.out.println("Res: " + res);
-            if(res == 200) {
+//            if(res == 200) {
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 String line = "";
                 while ((line = br.readLine()) != null) {
@@ -58,13 +58,14 @@ public class Poster extends AsyncTask<String, Void, String>
                 br.close();
 
                 System.out.println("Something to it: " + responseOutput.toString());
-            }
+//            }
 
             if(res == 200){
                 conn.disconnect();
                 return responseOutput.toString();
             }
             else {
+
                 conn.disconnect();
                 return "";
             }
